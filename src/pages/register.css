@@ -1,0 +1,57 @@
+.register-background {
+    width: 100vw;
+    height: 100vh;
+}
+
+.register-container {
+    background-color: #0c93d1;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40vw;
+    height: auto;
+}
+
+.register-container h2 {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.register-container h3 {
+    font-size: 1.5rem;
+    transform: skew(5deg);
+}
+
+.register-container input {
+    width: 100%;
+    padding: 0.5rem;
+    outline: 2px solid white;
+    border-radius: 12px;
+    color: white;
+}
+
+.register-container input:focus {
+    background-color: white;
+    color: #0284C7;
+}
+
+.register-btn {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    width: 40%;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-top: 20px;
+    background-color: rgb(172, 228, 238);
+    color: rgb(2, 72, 94);
+}
+
+.register-btn:hover {
+    background-color: white;
+    color: black;
+    outline: 3px solid red;
+    box-shadow: 7px 7px 0px red;
+    transform: rotate(-4deg) skew(-2deg);
+}
