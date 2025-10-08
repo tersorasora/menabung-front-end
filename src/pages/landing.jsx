@@ -7,6 +7,8 @@ export default function LandingPage() {
   const [nickname, setNickname] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [date, setDate] = useState("");
   const [type, setType] = useState("deposit");
   const [balance, setBalance] = useState(0);
   const token = localStorage.getItem("token");
@@ -20,7 +22,7 @@ export default function LandingPage() {
   const getUserIdFromToken = () => {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      return payload.sub; // same as user_id
+      return payload.sub;
     } catch (e) {
       console.error("Invalid token");
       return null;
@@ -42,6 +44,18 @@ export default function LandingPage() {
     }
   }
 
+  const fetchBalance = async () => {
+    try{
+      const userId = getUserIdFromToken();
+      if (!userId) throw new Error("Invalid user token");
+      const res = await API.get(`/User/${userId}`);
+      setBalance(res.data.balance || 0);
+    }catch(error) {
+      console.error(error);
+      setBalance(0);
+    }
+  }
+
   const fetchTransactions = async () => {
     try {
       const res = await API.get("/Transaction/user");
@@ -51,7 +65,7 @@ export default function LandingPage() {
         (sum, t) => (t.transaction_type === "deposit" ? sum + t.transaction_nominal : sum - t.transaction_nominal),
         0
       );
-      setBalance(total);
+      fetchBalance();
     } catch {
       setTransactions([]);
     }
@@ -85,6 +99,24 @@ export default function LandingPage() {
       <h1 className="balance">Balance: Rp.{balance.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
 
       <div className="transaction-form">
+        <select 
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="select-filter"
+        >
+          <option value="all">All</option>
+          <option value="months">By Month</option>
+        </select>
+
+        <input 
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          placeholder="Select Date"
+          className="input-date"
+          disabled={filter !== "months"}
+        />
+
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
@@ -120,6 +152,7 @@ export default function LandingPage() {
             >
               <p className="tx-type">{t.transaction_type}</p>
               <p className="tx-amount">Amount: {t.transaction_nominal}</p>
+              <p className="tx-desc">{t.description}</p>
               <p className="tx-date">
                 {new Date(t.transaction_date).toLocaleString()}
               </p>

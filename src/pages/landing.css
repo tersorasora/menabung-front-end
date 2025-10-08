@@ -55,26 +55,39 @@ body {
     margin-bottom: 30px;
 }
 
+.select-filter,
+.input-date,
 .select-type,
 .input-amount {
     padding: 10px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    background-color: black;
+    outline: 2px solid white;
     font-size: 1rem;
+    color: white;
+}
+
+.input-date.disabled,
+.input-date:disabled {
+  background-color: #202020;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #ddd;
 }
 
 .add-btn {
     padding: 10px 16px;
-    background-color: #007bff;
-    color: white;
+    background-color: white;
+    color: black;
     border: none;
-    border-radius: 6px;
+    border-radius: 2px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .add-btn:hover {
-    background-color: #0056b3;
+    background-color: red;
+    color: white;
 }
 
 .transaction-list {
@@ -91,13 +104,15 @@ body {
 }
 
 .transaction-card.deposit {
-    background-color: #d4f8d4;
-    border-left: 6px solid #4caf50;
+    background-color: black;
+    outline: 3px solid white;
+    color: white;
 }
 
 .transaction-card.withdraw {
-    background-color: #f8d4d4;
-    border-left: 6px solid #e74c3c;
+    background-color: black;
+    outline: 3px solid red;
+    color: red;
 }
 
 .tx-type {
@@ -111,10 +126,10 @@ body {
 
 .tx-date {
     font-size: 0.9rem;
-    color: #555;
+    color: #868484;
 }
 
 .no-tx {
     text-align: center;
-    color: #888;
+    color: #868484;
 }
