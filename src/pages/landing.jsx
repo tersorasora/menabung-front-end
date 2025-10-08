@@ -1,19 +1,50 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import API from "../api";
+import './landing.css'
 
 export default function LandingPage() {
+  const [nickname, setNickname] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("deposit");
   const [balance, setBalance] = useState(0);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
+    fetchUser();
     fetchTransactions();
   }, []);
 
+  const getUserIdFromToken = () => {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.sub; // same as user_id
+    } catch (e) {
+      console.error("Invalid token");
+      return null;
+    }
+  };
+  
+  const fetchUser = async () => {
+    try {
+      const userId = getUserIdFromToken();
+      if (!userId) throw new Error("Invalid user token");
+      const res = await API.get(`/User/${userId}`);
+      setNickname(res.data.nickname || "User");
+      setBalance(res.data.balance || 0);
+    }catch(error) {
+      console.error(error);
+      alert("Session expired, please login again.");
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  }
+
   const fetchTransactions = async () => {
     try {
-      const res = await API.get("/transaction/user");
+      const res = await API.get("/Transaction/user");
       setTransactions(res.data);
       // quick balance calc
       const total = res.data.reduce(
@@ -41,50 +72,57 @@ export default function LandingPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
-      <button onClick={handleLogout} className="absolute top-4 right-4 text-red-600 font-semibold">
-        Logout
+    <div className="landing-container">
+      <button onClick={handleLogout} className="logout-btn">
+        LOGOUT
       </button>
-      <h1 className="text-4xl font-bold mt-6 mb-8">Balance: ${balance.toFixed(2)}</h1>
 
-      <div className="flex gap-2 mb-6">
-        <select value={type} onChange={(e) => setType(e.target.value)} className="border p-2 rounded">
+      <h1 className="user-nickname">WELCOME BACK, {nickname}</h1>
+      <h1 className="balance">Balance: Rp.{balance.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+
+      <div className="transaction-form">
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="select-type"
+        >
           <option value="deposit">Deposit</option>
           <option value="withdraw">Withdraw</option>
         </select>
+
         <input
           type="number"
-          className="border p-2 rounded"
+          className="input-amount"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        <button
-          onClick={handleAddTransaction}
-          className="bg-blue-500 text-white px-4 rounded hover:bg-blue-600"
-        >
+
+        <button onClick={handleAddTransaction} className="add-btn">
           Add
         </button>
       </div>
 
-      <div className="grid gap-3 w-full max-w-md">
+      <div className="transaction-list">
         {transactions.length === 0 ? (
-          <p className="text-gray-500">No transactions yet</p>
+          <p className="no-tx">No transactions yet</p>
         ) : (
           transactions.map((t) => (
             <div
               key={t.transaction_id}
-              className={`p-4 rounded shadow-md ${
-                t.transaction_type === "deposit" ? "bg-green-100" : "bg-red-100"
+              className={`transaction-card ${
+                t.transaction_type === "deposit" ? "deposit" : "withdraw"
               }`}
             >
-              <p className="font-semibold capitalize">{t.transaction_type}</p>
-              <p>Amount: {t.transaction_nominal}</p>
-              <p className="text-sm text-gray-500">{new Date(t.transaction_date).toLocaleString()}</p>
+              <p className="tx-type">{t.transaction_type}</p>
+              <p className="tx-amount">Amount: {t.transaction_nominal}</p>
+              <p className="tx-date">
+                {new Date(t.transaction_date).toLocaleString()}
+              </p>
             </div>
           ))
         )}

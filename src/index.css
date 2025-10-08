@@ -21,7 +21,7 @@ html, body {
   min-width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  background: rgb(36, 36, 36);
+  background: rgb(0, 0, 0);
   /* background-image: url('assets/image/auth-bg.png');
   background-size: cover;      
   background-repeat: no-repeat; 

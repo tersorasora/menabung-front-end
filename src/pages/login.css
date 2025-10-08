@@ -4,12 +4,13 @@
 }
 
 .login-container {
-    background-color: #0c93d1;
+    background-color: #000000;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 40vw;
     height: auto;
+    outline: 4px solid red;
 }
 
 .login-container h2 {
@@ -31,8 +32,7 @@
 }
 
 .login-container input:focus {
-    background-color: white;
-    color: #0284C7;
+    color: #ff0000;
 }
 
 .login-btn {
@@ -44,8 +44,9 @@
     font-size: 2rem;
     cursor: pointer;
     margin-top: 20px;
-    background-color: rgb(172, 228, 238);
-    color: rgb(2, 72, 94);
+    background-color: rgb(0, 0, 0);
+    outline: 2px solid white;
+    color: rgb(255, 0, 0);
 }
 
 .login-btn:hover {

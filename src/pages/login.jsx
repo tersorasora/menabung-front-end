@@ -26,21 +26,21 @@ export default function Login() {
 
   return (
     <div className="login-background flex flex-col items-center justify-center">
-      <div className="login-container text-sky-50">
-        <h2 className="text-sky-900">LOGIN PAGE</h2>
+      <div className="login-container">
+        <h2 className="text-red-600">LOGIN PAGE</h2>
         <form onSubmit={handleLogin}>
           <div className="form-section-username" style={{ marginBottom: "1rem" }}>
-            <h3 className="text-sky-100 ">USERNAME</h3>
+            <h3 className="text-red-100 ">USERNAME</h3>
             <input name="username" label="Username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
           </div>
           <div className="form-section-password" style={{ marginBottom: "1rem" }}>
-            <h3 className="text-sky-100 ">Password</h3>
+            <h3 className="text-red-100 ">Password</h3>
             <input name="password" label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
 
-          <button className="login-btn" type="submit">Login</button>
+          <button className="login-btn" type="submit" to="/">Login</button>
         </form>
-        <Link className="text-sky-100" to="/register">Belum Punya Akun?</Link>
+        <Link className="text-red-400" to="/register">Belum Punya Akun?</Link>
       </div>
     </div>
   );
